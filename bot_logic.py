@@ -5,7 +5,7 @@ import logging, generator, telegram
 
 from telegram.ext import Updater, CommandHandler
 
-logging.basicConfig(level=logging.DEBUG,
+logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
 class Chat:

@@ -25,10 +25,10 @@
         <entry file="file://$PROJECT_DIR$/bot_logic.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.23972602">
-              <caret line="7" column="39" selection-start-line="7" selection-start-column="39" selection-end-line="7" selection-end-column="39" />
+              <caret line="7" column="38" selection-start-line="7" selection-start-column="38" selection-end-line="7" selection-end-column="38" />
               <folding>
                 <element signature="e#47#82#0" expanded="true" />
-                <element signature="e#2151#2288#0" expanded="false" />
+                <element signature="e#2150#2287#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -347,7 +347,7 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#47#82#0" expanded="true" />
-            <element signature="e#2151#2288#0" expanded="false" />
+            <element signature="e#2150#2287#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -368,7 +368,7 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#47#82#0" expanded="true" />
-            <element signature="e#2151#2288#0" expanded="false" />
+            <element signature="e#2150#2287#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -425,10 +425,10 @@
     <entry file="file://$PROJECT_DIR$/bot_logic.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.23972602">
-          <caret line="7" column="39" selection-start-line="7" selection-start-column="39" selection-end-line="7" selection-end-column="39" />
+          <caret line="7" column="38" selection-start-line="7" selection-start-column="38" selection-end-line="7" selection-end-column="38" />
           <folding>
             <element signature="e#47#82#0" expanded="true" />
-            <element signature="e#2151#2288#0" expanded="false" />
+            <element signature="e#2150#2287#0" expanded="false" />
           </folding>
         </state>
       </provider>
