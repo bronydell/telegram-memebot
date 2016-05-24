@@ -64,10 +64,14 @@ def start(bot, update):
 
 
 def create(bot, update):
+    for chat in chats:
+        if chat.id == update.message.chat_id:
+            chats.remove(chat)
+            break
     chat = Chat(update.message.chat_id)
     chats.append(chat)
     bot.sendMessage(update.message.chat_id, text='Let\'s start! Now what you what on top of image?', reply_markup=telegram.ReplyKeyboardMarkup([['[NONE TEXT]']]))
-
+    print(len(chats))
 
 
 def texting(bot, update):
