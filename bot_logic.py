@@ -40,7 +40,6 @@ class Chat:
         else:
             self.second = message.text
         addLine('User '+str(message.chat_id)+' writen '+self.second+' on bottom of image')
-        #print('Second step: '+self.second)
         bot.sendMessage(self.id, text='Nice! Send me a picture', reply_markup=telegram.ReplyKeyboardHide())
 
     def thirdStep(self, bot, message):
@@ -64,12 +63,18 @@ chats = list()
 
 def addLine(lin):
     with open('log.txt', 'a') as file:
-        file.write(lin+'\n')
+        from datetime import datetime
+        file.write('('+ str(datetime.now())+') '+lin+'\n')
 
 def start(bot, update):
     bot.sendMessage(update.message.chat_id,
                     text='I can create any meme what you want! Go ahead and use /create command')
 
+def feedback(bot, update):
+    bot.sendMessage(update.message.chat_id,
+                    text='Feel free to share your feedback here: https://storebot.me/bot/creatememe_bot'
+                         ' or you can write me directly: @bronydell')
+    addLine('User '+ str(update.message.chat_id)+' called feedback option!')
 
 def create(bot, update):
     for chat in chats:
@@ -99,9 +104,12 @@ addLine('----------START----------')
 updater = Updater(key)
 updater.dispatcher.add_handler(CommandHandler('start', start))
 updater.dispatcher.add_handler(CommandHandler('create', create))
+updater.dispatcher.add_handler(CommandHandler('feedback', feedback))
 from telegram.ext import MessageHandler, Filters
 updater.dispatcher.add_handler(MessageHandler([Filters.text], texting))
 updater.dispatcher.add_handler(MessageHandler([Filters.photo], texting))
+
+
 
 updater.start_polling()
 updater.idle()
