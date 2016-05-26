@@ -30,6 +30,7 @@ class Chat:
             self.first = ''
         else:
             self.first = message.text
+        addLine('User '+str(message.chat_id)+' writen '+self.first+' on top of image')
         #print('First step:'+self.first)
         bot.sendMessage(self.id, text='Okay! Now, what do you want to see on bottom of image?', reply_markup=telegram.ReplyKeyboardMarkup([['[NONE TEXT]']]))
 
@@ -38,11 +39,13 @@ class Chat:
             self.second = ''
         else:
             self.second = message.text
+        addLine('User '+str(message.chat_id)+' writen '+self.second+' on bottom of image')
         #print('Second step: '+self.second)
         bot.sendMessage(self.id, text='Nice! Send me a picture', reply_markup=telegram.ReplyKeyboardHide())
 
     def thirdStep(self, bot, message):
         if message.photo:
+            addLine('User '+str(message.chat_id)+' posted image')
             bot.sendChatAction(chat_id=message.chat_id, action=telegram.ChatAction.TYPING)
             bot.sendMessage(message.chat_id, 'Hold on. I trying to download image.')
             bot.getFile(message.photo[-1].file_id).download('images/in_' + str(message.chat_id)+'.jpg')
@@ -52,11 +55,16 @@ class Chat:
 
         else:
             self.step = self.step - 1
+            addLine('User '+str(message.chat_id)+' failed with posting')
             bot.sendMessage(message.chat_id, 'Send me a picture, not this!')
 
 
 chats = list()
 
+
+def addLine(lin):
+    with open('log.txt', 'a') as file:
+        file.write(lin+'\n')
 
 def start(bot, update):
     bot.sendMessage(update.message.chat_id,
@@ -66,12 +74,14 @@ def start(bot, update):
 def create(bot, update):
     for chat in chats:
         if chat.id == update.message.chat_id:
+            addLine('Removed user from queue with id '+str(update.message.chat_id))
             chats.remove(chat)
             break
     chat = Chat(update.message.chat_id)
     chats.append(chat)
     bot.sendMessage(update.message.chat_id, text='Let\'s start! Now what you what on top of image?', reply_markup=telegram.ReplyKeyboardMarkup([['[NONE TEXT]']]))
-    print(len(chats))
+    addLine('Added new user to queue with id '+str(update.message.chat_id))
+
 
 
 def texting(bot, update):
@@ -85,6 +95,7 @@ def texting(bot, update):
 
 with open('key.config', 'r') as myfile: #You must put key in key.config!!! IMPORTANT!!!!
     key=myfile.read().replace('\n', '')
+addLine('----------START----------')
 updater = Updater(key)
 updater.dispatcher.add_handler(CommandHandler('start', start))
 updater.dispatcher.add_handler(CommandHandler('create', create))
