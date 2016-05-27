@@ -1,12 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import logging, generator, telegram
-
+import logging, generator, telegram, botan
 from telegram.ext import Updater, CommandHandler
 
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+
+with open('botan.config', 'r') as myfile: #You must put key for your bot in botan.config!!! IMPORTANT!!!!
+    botan_token=myfile.read().replace('\n', '')
 
 class Chat:
     def __init__(self, id):
@@ -67,16 +69,28 @@ def addLine(lin):
         file.write('('+ str(datetime.now())+') '+lin+'\n')
 
 def start(bot, update):
+    uid = update.message.chat_id
+    message_dict = update.to_dict()
+    event_name = 'New User'
+    botan.track(botan_token, uid, message_dict, event_name)
     bot.sendMessage(update.message.chat_id,
                     text='I can create any meme what you want! Go ahead and use /create command')
 
 def feedback(bot, update):
+    uid = update.message.chat_id
+    message_dict = update.to_dict()
+    event_name = 'Feedback'
+    botan.track(botan_token, uid, message_dict, event_name)
     bot.sendMessage(update.message.chat_id,
                     text='Feel free to share your feedback here: https://storebot.me/bot/creatememe_bot'
                          ' or you can write me directly: @bronydell')
     addLine('User '+ str(update.message.chat_id)+' called feedback option!')
 
 def create(bot, update):
+    uid = update.message.chat_id
+    message_dict = update.to_dict()
+    event_name = 'Creating a meme'
+    botan.track(botan_token, uid, message_dict, event_name)
     for chat in chats:
         if chat.id == update.message.chat_id:
             addLine('Removed user from queue with id '+str(update.message.chat_id))
@@ -90,6 +104,10 @@ def create(bot, update):
 
 
 def texting(bot, update):
+    uid = update.message.chat_id
+    message_dict = update.to_dict()
+    event_name = 'Message or photo'
+    botan.track(botan_token, uid, message_dict, event_name)
     gotcha = False
     for chat in chats:
         if chat.id == update.message.chat_id:
@@ -101,6 +119,7 @@ def texting(bot, update):
 with open('key.config', 'r') as myfile: #You must put key in key.config!!! IMPORTANT!!!!
     key=myfile.read().replace('\n', '')
 addLine('----------START----------')
+
 updater = Updater(key)
 updater.dispatcher.add_handler(CommandHandler('start', start))
 updater.dispatcher.add_handler(CommandHandler('create', create))
@@ -108,7 +127,6 @@ updater.dispatcher.add_handler(CommandHandler('feedback', feedback))
 from telegram.ext import MessageHandler, Filters
 updater.dispatcher.add_handler(MessageHandler([Filters.text], texting))
 updater.dispatcher.add_handler(MessageHandler([Filters.photo], texting))
-
 
 
 updater.start_polling()
