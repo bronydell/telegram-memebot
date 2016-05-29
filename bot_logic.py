@@ -45,7 +45,7 @@ class Chat:
     def thirdStep(self, bot, message):
         if message.photo:
             bot.sendChatAction(chat_id=message.chat_id, action=telegram.ChatAction.TYPING)
-            bot.sendMessage(message.chat_id, 'Hold on. I trying to download image.')
+            bot.sendMessage(message.chat_id, 'Hold on. I\'m trying to download the image.')
             bot.getFile(message.photo[-1].file_id).download('images/in_' + str(message.chat_id)+'.jpg')
             generator.make_meme(self.first, self.second, 'images/in_' + str(message.chat_id)+'.jpg', self.id, bot)
             chats.remove(self)
