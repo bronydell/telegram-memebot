@@ -59,7 +59,8 @@ docs/_build/
 
 # PyBuilder
 target/
-
+#SH files
+*.sh
 # Configs
 *.config
 
