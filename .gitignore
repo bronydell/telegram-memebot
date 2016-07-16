@@ -50,6 +50,9 @@ coverage.xml
 *.mo
 *.pot
 
+#Bullshit
+.DS_Store
+
 # Django stuff:
 *.log
 log.txt
@@ -63,6 +66,7 @@ target/
 *.sh
 # Configs
 *.config
+*.db
 
 # Ipython Notebook
 .ipynb_checkpoints
