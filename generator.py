@@ -2,7 +2,7 @@
 
 
 
-import sys
+import saver
 import telegram
 from PIL import ImageFont
 from PIL import Image
@@ -16,6 +16,10 @@ def make_meme(topString, bottomString, filename, id, bot):
     img = Image.open(filename)
     imageSize = img.size
 
+    if(saver.openPref(id, 'caps', False)):
+        topString = get_upper(topString)
+        bottomString = get_upper(bottomString)
+
     # find biggest font size that works
     fontSize = int(imageSize[1] / 8)
     font = ImageFont.truetype("/Library/Fonts/Impact.ttf", fontSize)
@@ -27,6 +31,10 @@ def make_meme(topString, bottomString, filename, id, bot):
         topTextSize = font.getsize(topString)
         bottomTextSize = font.getsize(bottomString)
 
+    fontSize = round(fontSize * float(saver.openPref(id, key='font_size', default=1)))
+    font = ImageFont.truetype("/Library/Fonts/Impact.ttf", fontSize)
+    topTextSize = font.getsize(topString)
+    bottomTextSize = font.getsize(bottomString)
     # find top centered position for top text
     topTextPositionX = (imageSize[0] / 2) - (topTextSize[0] / 2)
     topTextPositionY = 0
