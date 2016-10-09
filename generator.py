@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 
-
 import saver
 import telegram
 from PIL import ImageFont
@@ -49,6 +48,7 @@ def make_meme(topString, bottomString, filename, id, bot):
 
     # draw outlines
     # there may be a better way
+
     outlineRange = int(fontSize / 15)
     for x in range(-outlineRange, outlineRange + 1):
         for y in range(-outlineRange, outlineRange + 1):
