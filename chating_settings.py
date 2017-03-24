@@ -10,9 +10,4 @@ def fontSettings(bot, update):
                     reply_markup=telegram.ReplyKeyboardHide())
     saver.savePref(uid, 'Action', 'settings_font')
 
-def capsSettings(bot, update):
-    uid = update.message.chat_id
-    bot.sendMessage(uid, text='Turn this feature on?', reply_markup=telegram.ReplyKeyboardMarkup([['Yes'],
-                                                                                                      ['No']]))
-    saver.savePref(uid, 'Action', 'settings_caps')
 

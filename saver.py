@@ -13,3 +13,10 @@ def openPref(user, key, default):
         return d[str(user)+'.'+str(key)]
     else:
         return default
+
+def getUsers():
+    d = shelve.open(filename)
+    users = set()
+    for key in list(d.keys()):
+        users.add(key.split('.')[0])
+    return users

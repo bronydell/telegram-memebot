@@ -1,0 +1,114 @@
+{
+  "system_messages": {
+    "feedback": "Оставьте ваш фидбек здесь: https://storebot.me/bot/creatememe_bot или напишите мне лично сюда: @bronydell",
+    "pick_lang": "Поменять язык",
+    "number_parse_error": "Ты уверен что это номер? Попробуй еще раз",
+    "jobs_finished": "Готово",
+    "editing": "Обрабатываю...",
+    "uploading": "Загружаю..."
+  },
+  "menu":{
+    "message": "Нажмите \"Создать мем\", что бы создать мем или отправь картинку с подписью <текст снизу>/<текст сверху>",
+    "keyboard":[
+      {
+        "text": "Создать мем",
+        "action": "top"
+      },
+      {
+        "text": "Настройки",
+        "action": "settings"
+      },
+      {
+        "text": "Отправить отзыв",
+        "action": "feedback"
+      }
+    ]
+  },
+  "top":{
+    "message": "Напишите текст, который вы хотите увидеть сверху",
+    "keyboard":[
+      {
+        "text": "[Ничего]",
+        "action": "bottom"
+      },
+      {
+        "text": "Назад в меню",
+        "action": "menu"
+      }
+    ]
+  },
+  "bottom":{
+    "message": "Напишите текст, который вы хотите увидеть снизу",
+    "keyboard":[
+      {
+        "text": "[Ничего]",
+        "action": "send_image"
+      },
+      {
+        "text": "Назад в меню",
+        "action": "menu"
+      }
+    ]
+  },
+  "send_image":{
+    "message": "И наконец! Отправь мне свою картинку, либо используй предыдущую",
+    "keyboard":[
+      {
+        "text": "Использовать предыдущую картинку",
+        "action": "previous_image"
+      },
+      {
+        "text": "Назад в меню",
+        "action": "menu"
+      }
+    ]
+  },
+  "settings":{
+    "message": "Что будем менять в настройках?",
+    "keyboard": [
+      {
+        "text": "Маштаб шрифтов",
+        "action": "font"
+      },
+      {
+        "text": "Настройки капса",
+        "action": "caps"
+      },
+      {
+        "text": "Настройки языка",
+        "action": "lang"
+      },
+      {
+        "text": "Назад в меню",
+        "action": "menu"
+      }
+    ]
+  },
+  "font":{
+    "message": "Отправь мне масштаб шрифта(Например, 0.5 или 1). Нанешний размер составляет {}",
+    "keyboard": [
+      {
+        "text": "Назад",
+        "action": "settings"
+      }
+    ]
+  },
+
+  "caps": {
+    "message": "Выключить эту функцию?",
+    "keyboard": [
+      {
+        "text": "Да, включи её",
+        "action": "caps_on"
+      },
+      {
+        "text": "Нет, выключи её",
+        "action": "caps_off"
+      },
+      {
+        "text": "Назад",
+        "action": "settings"
+      }
+    ]
+  }
+}

@@ -3,6 +3,7 @@
 
 import saver
 import telegram
+import super_actions as actions
 from PIL import ImageFont
 from PIL import Image
 from PIL import ImageDraw
@@ -10,12 +11,13 @@ from PIL import ImageDraw
 
 
 def make_meme(topString, bottomString, filename, id, bot):
-    bot.sendMessage(id, 'Editing...')
+    settings = actions.getBotSettings(id)
+    bot.sendMessage(id, text=settings['system_messages']['editing'])
     bot.sendChatAction(chat_id=id, action=telegram.ChatAction.UPLOAD_PHOTO)
     img = Image.open(filename)
     imageSize = img.size
 
-    if(saver.openPref(id, 'caps', False)):
+    if saver.openPref(id, 'caps', False):
         topString = get_upper(topString)
         bottomString = get_upper(bottomString)
 
@@ -57,15 +59,12 @@ def make_meme(topString, bottomString, filename, id, bot):
 
     draw.text(topTextPosition, topString, (255, 255, 255), font=font)
     draw.text(bottomTextPosition, bottomString, (255, 255, 255), font=font)
-    bot.sendMessage(id, 'Uploading...')
+    bot.sendMessage(id, text=settings['system_messages']['uploading'])
     img.save('images/out_'+str(id)+'.jpg')
     bot.sendPhoto(chat_id=id, photo=open('images/out_'+str(id)+'.jpg', 'rb'))
 
 
 def get_upper(somedata):
-    '''
-    Handle Python 2/3 differences in argv encoding
-    '''
     result = ''
     try:
         result = somedata.decode("utf-8").upper()
@@ -75,9 +74,6 @@ def get_upper(somedata):
 
 
 def get_lower(somedata):
-    '''
-    Handle Python 2/3 differences in argv encoding
-    '''
     result = ''
     try:
         result = somedata.decode("utf-8").lower()

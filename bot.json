@@ -1,0 +1,114 @@
+{
+  "system_messages": {
+    "feedback": "Feel free to share your feedback here: https://storebot.me/bot/creatememe_bot or you can write me directly: @bronydell",
+    "pick_lang": "Choose your language",
+    "number_parse_error": "Are you sure about this number? Try again",
+    "jobs_finished": "Done",
+    "editing": "Editing...",
+    "uploading": "Uploading..."
+  },
+  "menu":{
+    "message": "Press \"Create Meme\" to create meme, or just send image with caption <bottom text>/<top text>",
+    "keyboard":[
+      {
+        "text": "Create meme",
+        "action": "top"
+      },
+      {
+        "text": "Settings",
+        "action": "settings"
+      },
+      {
+        "text": "Feedback",
+        "action": "feedback"
+      }
+    ]
+  },
+  "top":{
+    "message": "Enter your text, that you want to see on top of the image",
+    "keyboard":[
+      {
+        "text": "[Nothing]",
+        "action": "bottom"
+      },
+      {
+        "text": "Back to menu",
+        "action": "menu"
+      }
+    ]
+  },
+  "bottom":{
+    "message": "Enter your text, that you want to see on bottom of the image",
+    "keyboard":[
+      {
+        "text": "[Nothing]",
+        "action": "send_image"
+      },
+      {
+        "text": "Back to menu",
+        "action": "menu"
+      }
+    ]
+  },
+  "send_image":{
+    "message": "Finally! Send your image or use your last image",
+    "keyboard":[
+      {
+        "text": "Use previous image",
+        "action": "previous_image"
+      },
+      {
+        "text": "Back to menu",
+        "action": "menu"
+      }
+    ]
+  },
+  "settings":{
+    "message": "What do you want to change in your settings?",
+    "keyboard": [
+      {
+        "text": "Font scale",
+        "action": "font"
+      },
+      {
+        "text": "Caps settings",
+        "action": "caps"
+      },
+      {
+        "text": "Language settings",
+        "action": "lang"
+      },
+      {
+        "text": "Back to menu",
+        "action": "menu"
+      }
+    ]
+  },
+  "font":{
+    "message": "Send me scale of font(For example, 0.5 or 1). Current scale is {}",
+    "keyboard": [
+      {
+        "text": "Back",
+        "action": "settings"
+      }
+    ]
+  },
+
+  "caps": {
+    "message": "Turn this feature on?",
+    "keyboard": [
+      {
+        "text": "Yes. Turn it on",
+        "action": "caps_on"
+      },
+      {
+        "text": "No. Turn it off",
+        "action": "caps_off"
+      },
+      {
+        "text": "Back",
+        "action": "settings"
+      }
+    ]
+  }
+}
