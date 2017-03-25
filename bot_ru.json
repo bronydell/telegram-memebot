@@ -4,6 +4,7 @@
     "pick_lang": "Поменять язык",
     "number_parse_error": "Ты уверен что это номер? Попробуй еще раз",
     "jobs_finished": "Готово",
+    "hold_on": "Подожди. Пытаюсь скачать картинку",
     "editing": "Обрабатываю...",
     "uploading": "Загружаю..."
   },
@@ -21,6 +22,40 @@
       {
         "text": "Отправить отзыв",
         "action": "feedback"
+      },
+      {
+        "text": "Админка",
+        "action": "admin",
+        "admin_only": true
+      }
+
+    ]
+  },
+  "admin":{
+    "message": "Добро пожаловать в админку, солдат",
+    "keyboard":[
+      {
+        "text": "Отправить сообщение всем пользователям",
+        "action": "sendmsg",
+        "admin_only": true
+      },
+      {
+        "text": "Отправить всех пользователей в меню",
+        "action": "reset",
+        "admin_only": true
+      },
+      {
+        "text": "Назад в меню",
+        "action": "menu"
+      }
+    ]
+  },
+  "sendmsg":{
+    "message": "Отправь сообщение для пользователей",
+    "keyboard":[
+      {
+        "text": "Назад в админку",
+        "action": "admin"
       }
     ]
   },
@@ -55,7 +90,8 @@
     "keyboard":[
       {
         "text": "Использовать предыдущую картинку",
-        "action": "previous_image"
+        "action": "previous_image",
+        "had_image": 1
       },
       {
         "text": "Назад в меню",

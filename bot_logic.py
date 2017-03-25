@@ -3,7 +3,6 @@
 
 import logging, telegram, botan
 from telegram.ext import Updater, CommandHandler
-import chating_settings
 import saver, generator
 import numpy as np
 import super_actions as actions
@@ -39,6 +38,7 @@ def capsView(bot, update):
     bot.sendMessage(update.message.chat_id,
                     text=settings['caps']['message'],
                     reply_markup=telegram.ReplyKeyboardMarkup(actions.getKeyboard('caps', uid)))
+
 
 def fontView(bot, update):
     uid = update.message.from_user.id
@@ -77,6 +77,33 @@ def sendImageView(bot, update):
                     reply_markup=telegram.ReplyKeyboardMarkup(actions.getKeyboard('send_image', uid)))
 
 
+def adminView(bot, update):
+    uid = update.message.from_user.id
+    settings = actions.getBotSettings(uid)
+    message_dict = update.to_dict()
+    event_name = 'Admin panel'
+    botan.track(botan_token, uid, message_dict, event_name)
+    saver.savePref(uid, 'Action', 'admin')
+    bot.sendMessage(update.message.chat_id,
+                    text=settings['admin']['message'],
+                    reply_markup=telegram.ReplyKeyboardMarkup(actions.getKeyboard('admin', uid)))
+
+
+def sendMsgView(bot, update):
+    uid = update.message.from_user.id
+    if uid in saver.getAdmins():
+        settings = actions.getBotSettings(uid)
+        message_dict = update.to_dict()
+        event_name = 'Sending message'
+        botan.track(botan_token, uid, message_dict, event_name)
+        saver.savePref(uid, 'Action', 'sendmsg')
+        bot.sendMessage(update.message.chat_id,
+                        text=settings['sendmsg']['message'],
+                        reply_markup=telegram.ReplyKeyboardMarkup(actions.getKeyboard('sendmsg', uid)))
+    else:
+        menuView(bot, update)
+
+
 def previousImage(bot, update):
     uid = update.message.from_user.id
     settings = actions.getBotSettings(uid)
@@ -107,11 +134,25 @@ def getLangsView(bot, update):
                     reply_markup=telegram.ReplyKeyboardMarkup(keyboard=menu))
 
 
+def sendIt(bot, update):
+    uid = update.message.from_user.id
+    settings = actions.getBotSettings(uid)
+    if uid in saver.getAdmins():
+        for user in saver.getUsers():
+            actions.sendMessage(bot, update, user)
+    else:
+        menuView(bot, update)
+
+
 def performIt(bot, update, act):
     if act == 'menu':
         menuView(bot, update)
     elif act == 'top':
         topTextView(bot, update)
+    elif act == 'admin':
+        adminView(bot, update)
+    elif act == 'sendmsg':
+        sendMsgView(bot, update)
     elif act == 'bottom':
         bottomTextView(bot, update)
     elif act == 'feedback':
@@ -124,6 +165,8 @@ def performIt(bot, update, act):
         settingsView(bot, update)
     elif act == 'caps':
         capsView(bot, update)
+    elif act == 'reset':
+        resetEveryone(bot, update)
     elif act == 'font':
         fontView(bot, update)
     elif act == 'caps_on':
@@ -136,14 +179,16 @@ def performIt(bot, update, act):
         getLangsView(bot, update)
 
 
-def menuView(bot, update):
+def menuView(bot, update, user_id = -1):
     uid = update.message.chat_id
+    if user_id != -1:
+        uid = user_id
     settings = actions.getBotSettings(uid)
     message_dict = update.to_dict()
     event_name = 'Menu'
     botan.track(botan_token, uid, message_dict, event_name)
     saver.savePref(uid, 'Action', 'menu')
-    bot.sendMessage(update.message.chat_id,
+    bot.sendMessage(uid,
                     text=settings['menu']['message'],
                     reply_markup=telegram.ReplyKeyboardMarkup(actions.getKeyboard('menu', uid)))
 
@@ -181,7 +226,6 @@ def cancel(bot, update):
 def texting(bot, update):
     uid = update.message.chat_id
     act = saver.openPref(uid, 'Action', 'menu')
-    print(act)
     message_dict = update.to_dict()
     event_name = 'Message'
     botan.track(botan_token, uid, message_dict, event_name)
@@ -198,6 +242,9 @@ def texting(bot, update):
         elif act == 'bottom':
             saver.savePref(uid, 'Bottom', update.message.text)
             sendImageView(bot, update)
+        elif act == 'sendmsg':
+            sendIt(bot, update)
+            adminView(bot, update)
         elif act == 'pick_language':
             actions.setLocale(uid, update.message.text)
             settingsView(bot, update)
@@ -216,6 +263,12 @@ def texting(bot, update):
     except Exception as ex:
         print(ex)
 
+def resetEveryone(bot, update):
+    try:
+        for user in saver.getUsers():
+            menuView(bot, update, user_id=user)
+    except:
+        bot.sendMessage(chat_id=update.message.from_user.id, text='Bot were blocked by user?')
 
 def image(bot, update):
     uid = update.message.chat_id
@@ -223,11 +276,12 @@ def image(bot, update):
     message_dict = update.to_dict()
     event_name = 'Photo'
     botan.track(botan_token, uid, message_dict, event_name)
+    settings = actions.getBotSettings(uid)
     if action == 'send_image':
         if update.message.photo:
             try:
                 bot.sendChatAction(chat_id=uid, action=telegram.ChatAction.TYPING)
-                bot.sendMessage(uid, 'Hold on. I\'m trying to download the image.')
+                bot.sendMessage(uid, settings['system_messages']['hold_on'])
                 bot.getFile(update.message.photo[-1].file_id).download('images/in_' + str(uid) + '.jpg')
                 generator.make_meme(saver.openPref(uid, 'Top', ''),
                                     saver.openPref(uid, 'Bottom', ''),
@@ -238,7 +292,6 @@ def image(bot, update):
                 menuView(bot, update)
     elif update.message.caption:
         lines = update.message.caption.split('/')
-        print(lines)
         saver.savePref(uid, 'Bottom', lines[0])
         if len(lines) > 1:
             saver.savePref(uid, 'Top', lines[1])
@@ -251,6 +304,10 @@ def image(bot, update):
 with open('key.config', 'r') as myfile:  # You must put key in key.config!!! IMPORTANT!!!!
     key = myfile.read().replace('\n', '')
 
+if len(saver.getAdmins()) == 0:
+    id = input('Enter admin ID: ')
+    saver.savePref(id, 'is_admin', True)
+
 updater = Updater(key)
 updater.dispatcher.add_handler(CommandHandler('start', menuView))
 updater.dispatcher.add_handler(CommandHandler('create', topTextView))
@@ -259,7 +316,8 @@ updater.dispatcher.add_handler(CommandHandler('cancel', menuView))
 
 from telegram.ext import MessageHandler, Filters
 
-updater.dispatcher.add_handler(MessageHandler(Filters.text, texting))
+updater.dispatcher.add_handler(
+    MessageHandler(Filters.text | Filters.sticker | Filters.audio | Filters.document, texting))
 updater.dispatcher.add_handler(MessageHandler(Filters.photo, image))
 
 updater.start_polling()

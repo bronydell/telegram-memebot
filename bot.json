@@ -4,9 +4,11 @@
     "pick_lang": "Choose your language",
     "number_parse_error": "Are you sure about this number? Try again",
     "jobs_finished": "Done",
+    "hold_on": "Hold on. I'm trying to download the image.",
     "editing": "Editing...",
     "uploading": "Uploading..."
   },
+
   "menu":{
     "message": "Press \"Create Meme\" to create meme, or just send image with caption <bottom text>/<top text>",
     "keyboard":[
@@ -21,6 +23,40 @@
       {
         "text": "Feedback",
         "action": "feedback"
+      },
+      {
+        "text": "Admin panel",
+        "action": "admin",
+        "admin_only": true
+      }
+
+    ]
+  },
+  "admin":{
+    "message": "Welcome to admin panel, Solder",
+    "keyboard":[
+      {
+        "text": "Send message to all users",
+        "action": "sendmsg",
+        "admin_only": true
+      },
+      {
+        "text": "Send everyone in the menu",
+        "action": "reset",
+        "admin_only": true
+      },
+      {
+        "text": "Back to main menu",
+        "action": "menu"
+      }
+    ]
+  },
+  "sendmsg":{
+    "message": "Send message to everybody",
+    "keyboard":[
+      {
+        "text": "Назад в админку",
+        "action": "admin"
       }
     ]
   },
@@ -55,7 +91,8 @@
     "keyboard":[
       {
         "text": "Use previous image",
-        "action": "previous_image"
+        "action": "previous_image",
+        "had_image": 1
       },
       {
         "text": "Back to menu",
