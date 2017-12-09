@@ -7,6 +7,7 @@ import saver, generator
 import numpy as np
 import super_actions as actions
 import os
+from threading import Thread
 
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -125,13 +126,17 @@ def getLangsView(bot, update):
     bot.sendMessage(uid, text=settings['system_messages']['pick_lang'],
                     reply_markup=telegram.ReplyKeyboardMarkup(keyboard=menu))
 
+def sendItAdm(bot, update):
+    for user in saver.getUsers():
+        actions.sendMessage(bot, update, user, update.message.text)
+
 
 def sendIt(bot, update):
     uid = update.message.from_user.id
     settings = actions.getBotSettings(uid)
     if uid in saver.getAdmins():
-        for user in saver.getUsers():
-            actions.sendMessage(bot, update, user)
+        thread = Thread(target=sendItAdm, args=(bot, update))
+        thread.start()
     else:
         menuView(bot, update)
 

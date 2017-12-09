@@ -2,7 +2,8 @@ import numpy as np
 import saver
 import json
 import os
-from telegram.error import Unauthorized
+import time
+from telegram.error import Unauthorized, RetryAfter
 locales = {
     'English': 'bot.json',
     'Русский': 'bot_ru.json'
@@ -18,51 +19,18 @@ def getLocale(uid):
     return saver.openPref(uid, 'locale', 'bot.json')
 
 def sendMessage(bot, update, user, text=None):
-    settings = getBotSettings(user)
-    uid = update.message.from_user.id
-    message = update.message
-    if text is None:
-        try:
-
-            if message.reply_to_message:
-                bot.forward_message(user, from_chat_id=message.reply_to_message.chat.id,
-                                    message_id=message.reply_to_message.message_id)
-            if message.photo:
-                if message.caption:
-                    bot.sendPhoto(chat_id=user, photo=message.photo[-1].file_id, caption=message.caption)
-                else:
-                    bot.sendPhoto(chat_id=user, photo=message.photo[-1].file_id)
-            elif message.text:
-                bot.sendMessage(chat_id=user, text=message.text)
-            elif message.document:
-                if message.caption:
-                    bot.sendDocument(chat_id=user, document=message.document.file_id, caption=
-                    message.caption)
-                else:
-                    bot.sendDocument(chat_id=user, document=message.document.file_id)
-            elif message.sticker:
-                bot.sendSticker(chat_id=user, sticker=message.sticker.file_id)
-            elif message.voice:
-                if message.caption:
-                    bot.sendVoice(chat_id=user, voice=message.voice.file_id, caption=message.caption)
-                else:
-                    bot.sendVoice(chat_id=user, voice=message.voice.file_id)
-            elif message.audio:
-                if message.caption:
-                    bot.sendAudio(chat_id=user, audio=message.audio.file_id, caption=message.caption)
-                else:
-                    bot.sendAudio(chat_id=user, audio=message.audio.file_id)
-            elif message.video:
-                if message.caption:
-                    bot.sendVideo(chat_id=user, video=message.video.file_id, caption=message.caption)
-                else:
-                    bot.sendVideo(chat_id=user, video=message.video.file_id)
-
-        except Unauthorized as ex:
-            bot.sendMessage(chat_id=uid, text='Error. Blocked?')
-
-    else:
+    try:
+        settings = getBotSettings(user)
+        uid = update.message.from_user.id
         bot.sendMessage(chat_id=user, text=text)
+        time.sleep(0.1)
+    except Unauthorized:
+        pass
+    except RetryAfter as ex:
+        time.sleep(ex.retry_after)
+        sendMessage(bot, update, user, text)
+    except:
+        pass
 
 def getKeyboard(tag, id):
     settings = getBotSettings(id)
