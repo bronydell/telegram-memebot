@@ -1,14 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import logging, telegram, botan
+import logging, telegram
 from telegram.ext import Updater, CommandHandler
 import saver, generator
 import numpy as np
 import super_actions as actions
 import os
 
-logging.basicConfig(level=logging.INFO,
+logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
 with open('botan.config', 'r') as myfile:  # You must put key for your bot in botan.config!!! IMPORTANT!!!!
@@ -20,7 +20,6 @@ def topTextView(bot, update):
     settings = actions.getBotSettings(uid)
     message_dict = update.to_dict()
     event_name = 'Top'
-    botan.track(botan_token, uid, message_dict, event_name)
     saver.savePref(uid, 'Action', 'top')
     saver.savePref(uid, 'Top', '')
     bot.sendMessage(update.message.chat_id,
@@ -33,7 +32,6 @@ def capsView(bot, update):
     settings = actions.getBotSettings(uid)
     message_dict = update.to_dict()
     event_name = 'Caps settings'
-    botan.track(botan_token, uid, message_dict, event_name)
     saver.savePref(uid, 'Action', 'caps')
     bot.sendMessage(update.message.chat_id,
                     text=settings['caps']['message'],
@@ -45,7 +43,6 @@ def fontView(bot, update):
     settings = actions.getBotSettings(uid)
     message_dict = update.to_dict()
     event_name = 'Font settings'
-    botan.track(botan_token, uid, message_dict, event_name)
     saver.savePref(uid, 'Action', 'font')
     bot.sendMessage(update.message.chat_id,
                     text=settings['font']['message'].format(saver.openPref(uid, 'font_size', 1)),
@@ -57,7 +54,6 @@ def bottomTextView(bot, update):
     settings = actions.getBotSettings(uid)
     message_dict = update.to_dict()
     event_name = 'Top'
-    botan.track(botan_token, uid, message_dict, event_name)
     saver.savePref(uid, 'Action', 'bottom')
     saver.savePref(uid, 'Bottom', '')
     bot.sendMessage(update.message.chat_id,
@@ -70,7 +66,6 @@ def sendImageView(bot, update):
     settings = actions.getBotSettings(uid)
     message_dict = update.to_dict()
     event_name = 'Sending Image'
-    botan.track(botan_token, uid, message_dict, event_name)
     saver.savePref(uid, 'Action', 'send_image')
     bot.sendMessage(update.message.chat_id,
                     text=settings['send_image']['message'],
@@ -82,7 +77,6 @@ def adminView(bot, update):
     settings = actions.getBotSettings(uid)
     message_dict = update.to_dict()
     event_name = 'Admin panel'
-    botan.track(botan_token, uid, message_dict, event_name)
     saver.savePref(uid, 'Action', 'admin')
     bot.sendMessage(update.message.chat_id,
                     text=settings['admin']['message'],
@@ -95,7 +89,6 @@ def sendMsgView(bot, update):
         settings = actions.getBotSettings(uid)
         message_dict = update.to_dict()
         event_name = 'Sending message'
-        botan.track(botan_token, uid, message_dict, event_name)
         saver.savePref(uid, 'Action', 'sendmsg')
         bot.sendMessage(update.message.chat_id,
                         text=settings['sendmsg']['message'],
@@ -109,7 +102,6 @@ def previousImage(bot, update):
     settings = actions.getBotSettings(uid)
     message_dict = update.to_dict()
     event_name = 'Previous image'
-    botan.track(botan_token, uid, message_dict, event_name)
     bot.sendChatAction(chat_id=uid, action=telegram.ChatAction.TYPING)
     if os.path.exists('images/in_' + str(uid) + '.jpg'):
         generator.make_meme(saver.openPref(uid, 'Top', ''),
@@ -186,7 +178,7 @@ def menuView(bot, update, user_id = -1):
     settings = actions.getBotSettings(uid)
     message_dict = update.to_dict()
     event_name = 'Menu'
-    botan.track(botan_token, uid, message_dict, event_name)
+    print(telegram.ReplyKeyboardMarkup(actions.getKeyboard('menu', uid)))
     saver.savePref(uid, 'Action', 'menu')
     bot.sendMessage(uid,
                     text=settings['menu']['message'],
@@ -198,7 +190,6 @@ def feedbackView(bot, update):
     settings = actions.getBotSettings(uid)
     message_dict = update.to_dict()
     event_name = 'Feedback'
-    botan.track(botan_token, uid, message_dict, event_name)
     bot.sendMessage(update.message.chat_id,
                     text=settings['system_messages']['feedback'])
     menuView(bot, update)
@@ -210,7 +201,6 @@ def settingsView(bot, update):
     saver.savePref(uid, 'Action', 'settings')
     message_dict = update.to_dict()
     event_name = 'Settings managing'
-    botan.track(botan_token, uid, message_dict, event_name)
     bot.sendMessage(update.message.chat_id, text=settings['settings']['message'],
                     reply_markup=telegram.ReplyKeyboardMarkup(actions.getKeyboard('settings', uid)))
 
@@ -219,7 +209,6 @@ def cancel(bot, update):
     uid = update.message.chat_id
     message_dict = update.to_dict()
     event_name = 'Cancel'
-    botan.track(botan_token, uid, message_dict, event_name)
     menuView(bot, update)
 
 
@@ -228,7 +217,6 @@ def texting(bot, update):
     act = saver.openPref(uid, 'Action', 'menu')
     message_dict = update.to_dict()
     event_name = 'Message'
-    botan.track(botan_token, uid, message_dict, event_name)
     try:
         settings = actions.getBotSettings(uid)
         if act in settings:
@@ -271,11 +259,10 @@ def resetEveryone(bot, update):
         bot.sendMessage(chat_id=update.message.from_user.id, text='Bot were blocked by user?')
 
 def image(bot, update):
-    uid = update.message.chat_id
+    uid = update.message.from_user.id
     action = saver.openPref(uid, 'Action', 'menu')
     message_dict = update.to_dict()
     event_name = 'Photo'
-    botan.track(botan_token, uid, message_dict, event_name)
     settings = actions.getBotSettings(uid)
     if action == 'send_image':
         if update.message.photo:
@@ -308,14 +295,16 @@ if len(saver.getAdmins()) == 0:
     id = input('Enter admin ID: ')
     saver.savePref(id, 'is_admin', True)
 
+
+
+from telegram.ext import MessageHandler, Filters
+
+
 updater = Updater(key)
 updater.dispatcher.add_handler(CommandHandler('start', menuView))
 updater.dispatcher.add_handler(CommandHandler('create', topTextView))
 updater.dispatcher.add_handler(CommandHandler('settings', settingsView))
 updater.dispatcher.add_handler(CommandHandler('cancel', menuView))
-
-from telegram.ext import MessageHandler, Filters
-
 updater.dispatcher.add_handler(
     MessageHandler(Filters.text | Filters.sticker | Filters.audio | Filters.document, texting))
 updater.dispatcher.add_handler(MessageHandler(Filters.photo, image))
