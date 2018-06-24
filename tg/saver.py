@@ -2,30 +2,34 @@ import shelve
 
 filename = "settings"
 
-def savePref(user,key,value):
+
+def save_pref(user, key, value):
     d = shelve.open(filename)
-    d[str(user)+'.'+str(key)] = value
+    d[str(user) + '.' + str(key)] = value
     d.close()
 
-def openPref(user, key, default):
+
+def open_pref(user, key, default):
     d = shelve.open(filename)
-    if (str(user)+'.'+str(key)) in d:
-        return d[str(user)+'.'+str(key)]
+    if (str(user) + '.' + str(key)) in d:
+        return d[str(user) + '.' + str(key)]
     else:
         return default
 
-def getUsers():
+
+def get_users():
     d = shelve.open(filename)
     users = set()
     for key in list(d.keys()):
         users.add(int(key.split('.')[0]))
     return users
 
-def getAdmins():
+
+def get_admins():
     d = shelve.open(filename)
     admins = set()
     for key in list(d.keys()):
         if key.split('.')[1] == 'is_admin':
-            if d['{}.is_admin'.format(key.split('.')[0])] == True:
+            if d['{}.is_admin'.format(key.split('.')[0])]:
                 admins.add(int(key.split('.')[0]))
     return admins

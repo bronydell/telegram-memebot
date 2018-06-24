@@ -50,7 +50,7 @@ coverage.xml
 *.mo
 *.pot
 
-#Bullshit
+# MacOS
 .DS_Store
 
 # Django stuff:
@@ -70,3 +70,10 @@ target/
 
 # Ipython Notebook
 .ipynb_checkpoints
+
+# User-specific stuff
+.idea/*
+.idea
+
+# User's data
+settings.*
