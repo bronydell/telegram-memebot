@@ -72,8 +72,7 @@ target/
 # Ipython Notebook
 .ipynb_checkpoints
 
-# User-specific stuff
-.idea/*
+# IDEA
 .idea
 
 # User's data
