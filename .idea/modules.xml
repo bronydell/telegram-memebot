@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/Meme_Generator.iml" filepath="$PROJECT_DIR$/.idea/Meme_Generator.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/telegram-memebot.iml" filepath="$PROJECT_DIR$/.idea/telegram-memebot.iml" />
     </modules>
   </component>
 </project>
