@@ -10,7 +10,7 @@ def generate_meme(sender):
     top_text = sender.get_preference('Top', '')
     bottom_text = sender.get_preference('Bottom', '')
     caps = sender.get_preference('Caps', False)
-    font_size = sender.get_preference('font_size', False)
+    font_size = sender.get_preference('font_size', 1)
     view.generate_meme(sender, top_text=top_text, bottom_text=bottom_text, caps=caps, font_size=font_size)
 
 

@@ -11,9 +11,7 @@ FONT_NAME_WINDOWS = "impact.ttf"
 
 
 def get_font(font_size):
-    if sys.platform == 'win32':
-        return ImageFont.truetype(FONT_NAME_WINDOWS, font_size)
-    return ImageFont.truetype(FONT_NAME_LINUX, font_size)
+    return ImageFont.truetype(FONT_NAME_WINDOWS, font_size)
 
 
 def make_meme(top_string,
@@ -21,6 +19,8 @@ def make_meme(top_string,
               filename,
               caps=False,
               font_scale=1.0):
+    print('Top string:', top_string)
+    print('Bottom string:', bottom_string)
     img = Image.open('images/in_' + str(filename) + '.jpg')
     image_size = img.size
 
@@ -39,7 +39,7 @@ def make_meme(top_string,
         top_text_size = font.getsize(top_string)
         bottom_text_size = font.getsize(bottom_string)
 
-    font_size = round(font_size * font_scale)
+    font_size = round(font_size * float(font_scale))
     font = get_font(font_size)
     top_text_size = font.getsize(top_string)
     bottom_text_size = font.getsize(bottom_string)
